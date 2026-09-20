@@ -87,11 +87,6 @@ fn collect_boot_info() -> BootInfo {
     let mut regions = [MemoryRegion::EMPTY; MAX_MEMORY_REGIONS];
 
     for (index, entry) in entries.iter().take(MAX_MEMORY_REGIONS).enumerate() {
-        let _ = serial::write_fmt(format_args!(
-            "AetherOS: boot [{}] memory region {}\n",
-            current_boot_stage_label(),
-            index
-        ));
         regions[index] = MemoryRegion::new(
             entry.base,
             entry.length,
