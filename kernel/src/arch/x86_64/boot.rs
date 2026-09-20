@@ -78,14 +78,20 @@ fn collect_boot_info() -> BootInfo {
     mark_boot_stage(BootStage::MemoryMapReady);
     log_boot_stage("memory map response collected");
 
+    let entries = memory_map_response.entries();
+    let _ = serial::write_fmt(format_args!(
+        "AetherOS: boot [{}] normalizing {} memory regions\n",
+        current_boot_stage_label(),
+        entries.len().min(MAX_MEMORY_REGIONS)
+    ));
     let mut regions = [MemoryRegion::EMPTY; MAX_MEMORY_REGIONS];
 
-    for (index, entry) in memory_map_response
-        .entries()
-        .iter()
-        .take(MAX_MEMORY_REGIONS)
-        .enumerate()
-    {
+    for (index, entry) in entries.iter().take(MAX_MEMORY_REGIONS).enumerate() {
+        let _ = serial::write_fmt(format_args!(
+            "AetherOS: boot [{}] memory region {}\n",
+            current_boot_stage_label(),
+            index
+        ));
         regions[index] = MemoryRegion::new(
             entry.base,
             entry.length,
