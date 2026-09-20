@@ -1,8 +1,8 @@
 # AetherOS
 
-[![CI](https://img.shields.io/github/actions/workflow/status/JoaoVictorAAbreu-Dev/Projeto_AetherOS/ci.yml?branch=master&label=ci)](https://github.com/JoaoVictorAAbreu-Dev/Projeto_AetherOS/actions)
-[![Docs](https://img.shields.io/github/actions/workflow/status/JoaoVictorAAbreu-Dev/Projeto_AetherOS/docs.yml?branch=master&label=docs)](https://github.com/JoaoVictorAAbreu-Dev/Projeto_AetherOS/actions)
-[![License](https://img.shields.io/github/license/JoaoVictorAAbreu-Dev/Projeto_AetherOS)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/JoaoVictorAAbreu-Dev/aetheros-rust-project/ci.yml?branch=master&label=ci)](https://github.com/JoaoVictorAAbreu-Dev/aetheros-rust-project/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/github/actions/workflow/status/JoaoVictorAAbreu-Dev/aetheros-rust-project/docs.yml?branch=master&label=docs)](https://github.com/JoaoVictorAAbreu-Dev/aetheros-rust-project/actions/workflows/docs.yml)
+[![License](https://img.shields.io/github/license/JoaoVictorAAbreu-Dev/aetheros-rust-project)](LICENSE)
 [![Roadmap](https://img.shields.io/badge/roadmap-active-0a7ea4)](ROADMAP.md)
 [![OSDev](https://img.shields.io/badge/focus-osdev%20education-111827)](docs/architecture/overview.md)
 
@@ -125,7 +125,7 @@ cargo run -p xtask -- run
 
 Notes:
 
-- The first `run` downloads the official Limine binary bundle into `dist/limine/`.
+- The first `run` downloads the pinned Limine v12.3.2 binary bundle into `dist/limine-v12.3.2/`.
 - The boot flow uses UEFI firmware plus a FAT-backed ESP directory, not `qemu -kernel`.
 - On headless environments, set `AETHER_QEMU_DISPLAY=none`.
 - To redirect serial logs, set `AETHER_QEMU_SERIAL=file:dist/serial.log`.

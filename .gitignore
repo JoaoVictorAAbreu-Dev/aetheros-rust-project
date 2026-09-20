@@ -8,4 +8,3 @@
 *.iso
 *.bin
 *.elf
-Cargo.lock

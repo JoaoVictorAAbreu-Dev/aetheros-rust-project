@@ -40,7 +40,7 @@ cargo run -p xtask -- test
 
 ## Notes
 
-- `cargo run -p xtask -- run` downloads the official Limine bundle into `dist/limine/` on first use.
+- `cargo run -p xtask -- run` downloads the pinned Limine v12.3.2 bundle into `dist/limine-v12.3.2/` on first use.
 - `cargo run -p xtask -- boot-check` is the preferred runtime validation command for testers and CI.
 - On Windows with the GNU toolchain, prefer cloning into an ASCII-only path without spaces if the linker reports object-file lookup failures.
 - If QEMU is not installed, build validation may still work but runtime milestones cannot be demonstrated.

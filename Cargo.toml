@@ -16,7 +16,7 @@ resolver = "2"
 edition = "2021"
 license = "MIT"
 authors = ["AetherOS Contributors"]
-repository = "https://github.com/JoaoVictorAAbreu-Dev/Projeto_AetherOS"
+repository = "https://github.com/JoaoVictorAAbreu-Dev/aetheros-rust-project"
 
 [profile.dev]
 panic = "abort"
@@ -29,4 +29,4 @@ bitflags = "2.6"
 limine = "0.6.5"
 log = "0.4"
 spin = "0.9"
-x86_64 = "0.15"
+x86_64 = "=0.15.4"

@@ -78,14 +78,15 @@ fn collect_boot_info() -> BootInfo {
     mark_boot_stage(BootStage::MemoryMapReady);
     log_boot_stage("memory map response collected");
 
+    let entries = memory_map_response.entries();
+    let _ = serial::write_fmt(format_args!(
+        "AetherOS: boot [{}] normalizing {} memory regions\n",
+        current_boot_stage_label(),
+        entries.len().min(MAX_MEMORY_REGIONS)
+    ));
     let mut regions = [MemoryRegion::EMPTY; MAX_MEMORY_REGIONS];
 
-    for (index, entry) in memory_map_response
-        .entries()
-        .iter()
-        .take(MAX_MEMORY_REGIONS)
-        .enumerate()
-    {
+    for (index, entry) in entries.iter().take(MAX_MEMORY_REGIONS).enumerate() {
         regions[index] = MemoryRegion::new(
             entry.base,
             entry.length,
@@ -128,7 +129,7 @@ fn classify_memory_region(entry_type: u64) -> MemoryRegionKind {
         5 => MemoryRegionKind::Reclaimable,
         6 => MemoryRegionKind::Kernel,
         7 => MemoryRegionKind::Framebuffer,
-        1 | 2 | 3 | 4 => MemoryRegionKind::Reserved,
+        1..=4 => MemoryRegionKind::Reserved,
         _ => MemoryRegionKind::Unknown,
     }
 }
