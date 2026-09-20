@@ -57,7 +57,7 @@ pub fn usable_range_count() -> usize {
 }
 
 fn align_up(value: u64, align: u64) -> u64 {
-    if value % align == 0 {
+    if value.is_multiple_of(align) {
         value
     } else {
         value + (align - (value % align))
@@ -109,7 +109,7 @@ impl FrameAllocator {
 
             if next > range.end {
                 if !self.advance_range(range_index) {
-                    return Some(current).filter(|_| current + FRAME_SIZE <= range.end);
+                    return (current + FRAME_SIZE <= range.end).then_some(current);
                 }
                 continue;
             }

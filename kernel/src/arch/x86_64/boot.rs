@@ -128,7 +128,7 @@ fn classify_memory_region(entry_type: u64) -> MemoryRegionKind {
         5 => MemoryRegionKind::Reclaimable,
         6 => MemoryRegionKind::Kernel,
         7 => MemoryRegionKind::Framebuffer,
-        1 | 2 | 3 | 4 => MemoryRegionKind::Reserved,
+        1..=4 => MemoryRegionKind::Reserved,
         _ => MemoryRegionKind::Unknown,
     }
 }
