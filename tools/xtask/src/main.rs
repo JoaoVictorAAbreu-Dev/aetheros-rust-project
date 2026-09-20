@@ -1,3 +1,4 @@
+use sha2::{Digest, Sha256};
 use std::env;
 use std::fs;
 use std::io;
@@ -10,9 +11,11 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 const LIMINE_DOWNLOAD_URL: &str =
-    "https://github.com/limine-bootloader/limine/releases/latest/download/limine-binary.zip";
+    "https://github.com/limine-bootloader/limine/releases/download/v12.3.2/limine-binary.zip";
+const LIMINE_DOWNLOAD_SHA256: &str =
+    "381c55e475a5b6f88afa73bb683fe985fb0d2c4252bfcf02420932c4a112fc8d";
 const DIST_DIR: &str = "dist";
-const LIMINE_CACHE_DIR: &str = "limine";
+const LIMINE_CACHE_DIR: &str = "limine-v12.3.2";
 const ESP_DIR: &str = "esp";
 const EFI_BOOT_DIR: &str = "EFI/BOOT";
 const LIMINE_CONF_NAME: &str = "limine.conf";
@@ -530,7 +533,27 @@ fn download_and_extract_limine(root: &Path) -> Result<(), String> {
         .map_err(|err| format!("failed to create Limine cache directory: {err}"))?;
 
     download_file(LIMINE_DOWNLOAD_URL, &archive_path)?;
+    verify_sha256(&archive_path, LIMINE_DOWNLOAD_SHA256)?;
     extract_zip(&archive_path, &cache_dir)
+}
+
+fn verify_sha256(path: &Path, expected: &str) -> Result<(), String> {
+    let bytes = fs::read(path).map_err(|err| {
+        format!(
+            "failed to read {} for verification: {err}",
+            path.display()
+        )
+    })?;
+    let actual = format!("{:x}", Sha256::digest(bytes));
+
+    if actual == expected {
+        Ok(())
+    } else {
+        Err(format!(
+            "SHA-256 mismatch for {}: expected {expected}, got {actual}",
+            path.display()
+        ))
+    }
 }
 
 fn download_file(url: &str, destination: &Path) -> Result<(), String> {
