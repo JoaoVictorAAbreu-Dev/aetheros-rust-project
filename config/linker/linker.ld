@@ -1,26 +1,53 @@
+OUTPUT_FORMAT(elf64-x86-64)
 ENTRY(_start)
+
+PHDRS
+{
+    limine_requests PT_LOAD FLAGS(0x06);
+    text PT_LOAD FLAGS(0x05);
+    rodata PT_LOAD FLAGS(0x04);
+    data PT_LOAD FLAGS(0x06);
+}
 
 SECTIONS
 {
     . = 0xffffffff80000000;
 
-    .text : ALIGN(4K) {
-        *(.text .text.*)
-    }
-
-    .rodata : ALIGN(4K) {
-        *(.rodata .rodata.*)
-    }
-
-    .data : ALIGN(4K) {
+    .limine_requests : {
         KEEP(*(.limine_requests_start))
         KEEP(*(.limine_requests))
         KEEP(*(.limine_requests_end))
-        *(.data .data.*)
-    }
+    } :limine_requests
 
-    .bss : ALIGN(4K) {
-        *(COMMON)
+    . = ALIGN(CONSTANT(MAXPAGESIZE));
+
+    .text : {
+        *(.text .text.*)
+    } :text
+
+    . = ALIGN(CONSTANT(MAXPAGESIZE));
+
+    .rodata : {
+        *(.rodata .rodata.*)
+    } :rodata
+
+    .note.gnu.build-id : {
+        *(.note.gnu.build-id)
+    } :rodata
+
+    . = ALIGN(CONSTANT(MAXPAGESIZE));
+
+    .data : {
+        *(.data .data.*)
+    } :data
+
+    .bss : {
         *(.bss .bss.*)
+        *(COMMON)
+    } :data
+
+    /DISCARD/ : {
+        *(.eh_frame*)
+        *(.note .note.*)
     }
 }
