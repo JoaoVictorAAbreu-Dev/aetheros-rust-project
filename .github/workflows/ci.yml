@@ -22,11 +22,11 @@ jobs:
         uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de
         with:
           toolchain: nightly-2026-06-07
-          components: rust-src, llvm-tools-preview
+          components: rust-src, llvm-tools-preview, rustfmt
       - name: Cache Rust artifacts
         uses: Swatinem/rust-cache@49a0bdc70d2e1b713ca9e2869b211fcce03d3c1c # v2
       - name: Run xtask host validation
-        run: cargo run -p xtask -- test
+        run: cargo run --locked -p xtask -- test
 
   stage-boot-tree:
     runs-on: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
       - name: Cache Rust artifacts
         uses: Swatinem/rust-cache@49a0bdc70d2e1b713ca9e2869b211fcce03d3c1c # v2
       - name: Stage UEFI boot tree
-        run: cargo run -p xtask -- stage
+        run: cargo run --locked -p xtask -- stage
 
   qemu-boot-check:
     runs-on: ubuntu-latest
@@ -64,4 +64,4 @@ jobs:
       - name: Verify headless QEMU boot
         env:
           AETHER_BOOT_TIMEOUT_SECS: 30
-        run: cargo run -p xtask -- boot-check
+        run: cargo run --locked -p xtask -- boot-check

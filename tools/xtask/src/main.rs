@@ -69,6 +69,7 @@ fn build_kernel() -> Result<(), String> {
     let mut command = cargo_command();
     command
         .arg("build")
+        .arg("--locked")
         .arg("--package")
         .arg("aether-kernel")
         .arg("--target")
@@ -259,6 +260,7 @@ fn run_workspace_tests() -> Result<(), String> {
     run_command(
         cargo_command()
             .arg("check")
+            .arg("--locked")
             .arg("--workspace")
             .current_dir(workspace_root()),
         "cargo check",
@@ -266,6 +268,7 @@ fn run_workspace_tests() -> Result<(), String> {
     run_command(
         cargo_command()
             .arg("test")
+            .arg("--locked")
             .arg("--package")
             .arg("aether-bootinfo")
             .arg("--package")
@@ -538,12 +541,8 @@ fn download_and_extract_limine(root: &Path) -> Result<(), String> {
 }
 
 fn verify_sha256(path: &Path, expected: &str) -> Result<(), String> {
-    let bytes = fs::read(path).map_err(|err| {
-        format!(
-            "failed to read {} for verification: {err}",
-            path.display()
-        )
-    })?;
+    let bytes = fs::read(path)
+        .map_err(|err| format!("failed to read {} for verification: {err}", path.display()))?;
     let actual = format!("{:x}", Sha256::digest(bytes));
 
     if actual == expected {
@@ -782,9 +781,9 @@ fn preferred_rustup_toolchain() -> Option<String> {
     }
 
     if cfg!(windows) {
-        Some("nightly-x86_64-pc-windows-gnu".to_string())
+        Some("nightly-2026-06-07-x86_64-pc-windows-gnu".to_string())
     } else {
-        Some("nightly".to_string())
+        Some("nightly-2026-06-07".to_string())
     }
 }
 
